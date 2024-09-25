@@ -1,7 +1,17 @@
 import express from "express";
+import connectDatabase from "./config/dbConnect.js";
+
+const connection = await connectDatabase();
+
+connection.on("error", (error) => {
+    console.error(error);
+});
+
+connection.once("open", () => {
+    console.log("Connection opened");
+});
 
 const app = express();
-
 // MIDDLEWARE
 app.use(express.json());
 
