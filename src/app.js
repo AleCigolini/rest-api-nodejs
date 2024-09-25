@@ -1,5 +1,6 @@
 import express from "express";
 import connectDatabase from "./config/dbConnect.js";
+import book from "./models/Book.js";
 
 const connection = await connectDatabase();
 
@@ -15,27 +16,17 @@ const app = express();
 // MIDDLEWARE
 app.use(express.json());
 
-const books = [
-{
-    id: 1,
-    title: "The office"
-},
-{
-    id: 2,
-    title: "Clean Architecture"
-}
-];
 
-function getBook(idBook) {
-    return books.findIndex(book => book.id === Number(idBook));
-}
+// ROUTES 
 
 app.get("/", (req, res) => {
     // SEND METHOD USUALLY IS USED TO SIMPLY DATA
     res.status(200).send("Node.js course!!");
 });
 
-app.get("/books", (req, res) => {
+app.get("/books", async (req, res) => {
+    const books = await book.find({});
+
     // HOW TO RETURN A JSON
     res.status(200).json(books);
 });

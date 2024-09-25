@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 // Added express.js framework
 import app from "./src/app.js";
 

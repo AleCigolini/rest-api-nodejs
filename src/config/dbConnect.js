@@ -1,7 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 
 async function connectDatabase() {
-    mongoose.connect("mongodb+srv://fake:fake@nodejs-course.rcry1.mongodb.net/livraria?retryWrites=true&w=majority&appName=nodejs-course");
+    mongoose.connect(process.env.DB_URL_CONNECTION);
 
     return mongoose.connection;
 }
