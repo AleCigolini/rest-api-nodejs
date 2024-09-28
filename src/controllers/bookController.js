@@ -1,3 +1,4 @@
+import { author } from "../models/Author.js";
 import book from "../models/Book.js";
 
 class bookController {
@@ -15,10 +16,17 @@ class bookController {
     }
 
     static async addBook(req, res) {
-        try {
-            const newBook = await book.create(req.body);
+        const bookBody = req.body;
 
-            res.status(201).json({ message: "Book created", book: newBook });
+        try {
+            const authorFound = await author.findById(bookBody.autor);
+
+            // HOW TO ADD A AUTHOR IN A BOOK 
+            const bookToCreate = { ...bookBody, autor: { ...authorFound._doc } }
+
+            const bookCreated = await book.create(bookToCreate);
+
+            res.status(201).json({ message: "Book created", book: bookCreated });
         } catch (error) {
             res.status(500).json({ message: `${error.message} - error to add a book` });
         }
@@ -58,6 +66,19 @@ class bookController {
             
             // HOW TO RETURN A JSON
             res.status(200).json({ message: "Book deleted" });
+        } catch (error) {
+            res.status(500).json({ message: `${error.message} - request error` });
+        }
+    }
+
+    static async getBooksByPublisher(req, res) {
+        const publisher = req.query.editora;
+
+        try {
+            const books = await book.find({ editora: publisher });
+            
+            // HOW TO RETURN A JSON
+            res.status(200).json(books);
         } catch (error) {
             res.status(500).json({ message: `${error.message} - request error` });
         }
